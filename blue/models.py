@@ -1,64 +1,74 @@
-from datetime import datetime
 from blue import db
 from blue import ma
 
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
+    name = db.Column(db.String(64), unique=True)
     icon = db.Column(db.String(120))
-    subcategories = db.relationship('SubCategory', backref='category', lazy='dynamic')
-    services = db.relationship('Service', backref='category', lazy='joined')
+    subcategories = db.relationship("SubCategory", backref='category', lazy="joined")
 
 
 class SubCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     services_count = db.Column(db.String(20))
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    services = db.relationship('Service', backref='sub_category', lazy='joined')
+    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
 
 class Service(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(200))
-    subcategory_id = db.Column(db.Integer, db.ForeignKey('sub_category.id'))
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    users = db.relationship('User', backref='service', lazy='joined')
+    photos = db.relationship("Photos")
+    user = db.relationship("User")
+    subcategory_id = db.Column(db.Integer, db.ForeignKey("sub_category.id"))
 
 
 class User(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     name = db.Column(db.String(64))
-    email = db.Column(db.String(64))
-    phone = db.Column(db.String(64))
-    identification = db.Column(db.String(15))
-    ussid = db.Column(db.String(10))
-    photo = db.Column(db.String(10))
-    bio = db.Column(db.String(200))
-    rating = db.Column(db.String(10))
-    status = db.Column(db.String(10))
-    type = db.Column(db.String(10))
-    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
-    locations = db.relationship('Location', backref='service', lazy='joined')
+    email = db.Column(db.String(64), unique=True)
+    phone = db.Column(db.String(64), unique=True)
+    account = db.relationship("Account")
+    service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
 
 
 class Location(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     lat = db.Column(db.String(20))
     long = db.Column(db.String(20))
+    account_id = db.Column(db.Integer, db.ForeignKey("account.id"))
+    account = db.relationship("Account")
+
+
+class Photos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    photo = db.Column(db.String())
+    service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
+    account_id = db.Column(db.Integer, db.ForeignKey("account.id"))
+
+
+class Account(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    provider = db.Column(db.Boolean)
+    bio = db.Column(db.String())
+    rating = db.Column(db.String())
+    photos = db.relationship("Photos")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-
-class CategorySchema(ma.ModelSchema):
-    class Meta:
-        model = Category
+    user = db.relationship("User")
 
 
 class SubCategorySchema(ma.ModelSchema):
     class Meta:
         model = SubCategory
+
+
+class CategorySchema(ma.ModelSchema):
+    subcategory = ma.Nested(SubCategorySchema(), many=True)
+
+    class Meta:
+        model = Category
 
 
 class ServiceSchema(ma.ModelSchema):
@@ -74,3 +84,13 @@ class UserSchema(ma.ModelSchema):
 class LocationSchema(ma.ModelSchema):
     class Meta:
         model = Location
+
+
+class AccountSchema(ma.ModelSchema):
+    class Meta:
+        model = Account
+
+
+class PhotoSchema(ma.ModelSchema):
+    class Meta:
+        model = Photos

@@ -18,5 +18,14 @@
         </library>
       </libraries>
     </data-source>
+    <data-source source="LOCAL" name="app.db" uuid="c702771b-a28f-48c3-bc52-89ebd5a98261">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/app.db</jdbc-url>
+      <driver-properties>
+        <property name="enable_load_extension" value="true" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>
