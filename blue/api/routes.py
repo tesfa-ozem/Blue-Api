@@ -1,23 +1,18 @@
-import json
-import os
-from flask import current_app, Blueprint, request, jsonify
-from sqlalchemy.orm import joinedload
-
-from blue.models import *
+from flask import request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from blue.utilities.utilities import *
+from blue import create_app
+import os
 
-mod = Blueprint('api', __name__)
+mod = Blueprint('api', __name__, url_prefix='/api')
 
 
 @mod.route('/categories', methods=['GET'])
 def get_categories():
     try:
-        categories = Category.query.order_by(Category.id).outerjoin(SubCategory).all()
+        categories = Category.query.order_by(Category.id).outerjoin(Subcategory).all()
         category_schema = CategorySchema(many=True)
-        for row in categories[1].subcategories:
-            print(row.__dict__)
-        return json.dumps(category_schema.dump(categories))
+        return jsonify(category_schema.dump(categories))
     except Exception as e:
         return str(e)
 
@@ -57,7 +52,7 @@ def add_subcategory():
     try:
         name = request.form['name']
         category_id = request.form["category_id"]
-        subcategory = SubCategory(name=name, category_id=category_id)
+        subcategory = Subcategory(name=name, category_id=category_id)
         db.session.add(subcategory)
         db.session.commit()
         resp = jsonify({'message': 'Record successfully uploaded'})
@@ -71,8 +66,8 @@ def add_subcategory():
 @mod.route('/subcategory', methods=['GET'])
 def get_subcategories():
     try:
-        subcategories = SubCategory.query.order_by(SubCategory.id).all()
-        subcatagory_schema = SubCategorySchema(many=True)
+        subcategories = Subcategory.query.order_by(Subcategory.id).all()
+        subcatagory_schema = SubcategorySchema(many=True)
         return jsonify(subcatagory_schema.dump(subcategories))
     except Exception as e:
         resp = jsonify({'Error': str(e.args)})
@@ -84,9 +79,8 @@ def add_service():
     try:
         name = request.form['name']
         description = request.form['description']
-        photos = request.form['photos']
         subcategory_id = request.form['subcategory_id']
-        service = Service(name=name, description=description, photos=photos, subcategory_id=subcategory_id)
+        service = Service(name=name, description=description, subcategory_id=subcategory_id)
         db.session.add(service)
         db.session.commit()
         resp = jsonify({'message': 'Record successfully uploaded'})
@@ -121,10 +115,9 @@ def add_account():
         provider = request.form['provider']
         bio = request.form['bio']
         rating = request.form['rating']
-        photos = request.form['photos']
         user_id = request.form['user_id']
 
-        account = Account(provider=provider, bio=bio, rating=rating, photos=photos, user_id=user_id)
+        account = Account(provider=True, bio=bio, rating=rating, user_id=user_id)
         db.session.add(account)
         db.session.commit()
         resp = jsonify({'message': 'Record successfully uploaded'})
@@ -134,3 +127,65 @@ def add_account():
         resp = jsonify({'Error': str(e.args)})
         return resp
 
+
+@mod.route("/subcategory", methods=['GET'])
+def get_subcategory():
+    try:
+        category_id = request.args.get('category_id')
+        subcategory = Subcategory.query.filter(Subcategory.category_id == category_id).one()
+        subcategory_schema = SubcategorySchema(many=True)
+        resp = jsonify({'message': 'Record successfully retried',
+                        "data": jsonify(subcategory_schema.dump(subcategory))})
+        resp.status_code = 201
+        return resp
+    except Exception as e:
+        resp = jsonify({'Error': str(e.args)})
+        return resp
+
+
+@mod.route("/linkAccount", methods=['POST'])
+def upadate_account():
+    account_id = request.form['account_id']
+    account = Account.query.filter(Account.id == add_account).one()
+
+
+@mod.route('/upload_photo', methods=['POST'])
+def upload_photo():
+    if request.method == 'POST' and request.files['image']:
+
+        # create_app().logger.info(create_app().config['UPLOAD_FOLDER'])
+        img = request.files['image']
+        img_name = secure_filename(img.filename)
+        Utilities.create_new_folder(create_app().config['UPLOAD_FOLDER'])
+        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
+        create_app().logger.info("saving {}".format(saved_path))
+        img.save(saved_path)
+        photo = Photos(photo=img_name, account_id=request.form['account_id'])
+        db.session.add(photo)
+        db.session.commit()
+        return jsonify({'message': 'Photo Uploaded'})
+    else:
+        return jsonify({'message': 'No Image'})
+
+
+@mod.route("/account", methods=['GET'])
+def get_account():
+    try:
+        if request.args.get('id') != '':
+            account_id = request.args.get('id')
+            account = Account.query.filter(Account.id == account_id).one()
+            account_schema = AccountSchema()
+            resp = jsonify({'message': 'Record successfully retried',
+                            "data": account_schema.dump(account)})
+            resp.status_code = 200
+            return resp
+        else:
+            account = Account.query.order_by(Account.id).all()
+            account_schema = AccountSchema(many=True)
+            resp = jsonify({'message': 'Record successfully retried',
+                            "data": account_schema.dump(account)})
+            resp.status_code = 200
+            return resp
+    except Exception as e:
+        resp = jsonify({'Error': str(e.args)})
+    return resp

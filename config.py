@@ -9,3 +9,5 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ADMINS = ['your-email@example.com']
+    PROJECT_HOME = os.path.dirname(os.path.realpath(__file__))
+    UPLOAD_FOLDER = '{}/uploads/'.format(PROJECT_HOME)

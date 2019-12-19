@@ -1,3 +1,6 @@
+import datetime
+import os
+
 from flask import Blueprint, json
 from sqlalchemy import inspect
 from sqlalchemy.ext.declarative import DeclarativeMeta
@@ -31,6 +34,12 @@ class Utilities:
         return {c.key: getattr(obj, c.key)
                 for c in inspect(obj).mapper.column_attrs}
 
+    def create_new_folder(local_dir):
+        newpath = local_dir
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+        return newpath
+
 
 class AlchemyEncoder(json.JSONEncoder):
 
@@ -49,3 +58,5 @@ class AlchemyEncoder(json.JSONEncoder):
             return fields
 
         return json.JSONEncoder.default(self, obj)
+
+

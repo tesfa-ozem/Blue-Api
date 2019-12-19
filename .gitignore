@@ -40,3 +40,4 @@ app.db
 microblog.log*
 .vscode
 migrations
+uploads

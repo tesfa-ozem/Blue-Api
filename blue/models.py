@@ -1,19 +1,25 @@
 from blue import db
 from blue import ma
 
+tags = db.Table('tags',
+                db.Column('account_id', db.Integer, db.ForeignKey('account.id'), primary_key=True),
+                db.Column('service_id', db.Integer, db.ForeignKey('service.id'), primary_key=True)
+                )
+
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     icon = db.Column(db.String(120))
-    subcategories = db.relationship("SubCategory", backref='category', lazy="joined")
+    subcategories = db.relationship("Subcategory", backref='category', lazy="joined")
 
 
-class SubCategory(db.Model):
+class Subcategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     services_count = db.Column(db.String(20))
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+    accounts = db.relationship("Account")
 
 
 class Service(db.Model):
@@ -22,7 +28,9 @@ class Service(db.Model):
     description = db.Column(db.String(200))
     photos = db.relationship("Photos")
     user = db.relationship("User")
-    subcategory_id = db.Column(db.Integer, db.ForeignKey("sub_category.id"))
+    subcategory_id = db.Column(db.Integer, db.ForeignKey("subcategory.id"))
+    account = db.relationship("Account", secondary=tags, lazy='subquery',
+                              backref=db.backref('service', lazy=True))
 
 
 class User(db.Model):
@@ -57,15 +65,16 @@ class Account(db.Model):
     photos = db.relationship("Photos")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User")
+    subcategory_id = db.Column(db.Integer, db.ForeignKey("subcategory.id"))
 
 
-class SubCategorySchema(ma.ModelSchema):
+class SubcategorySchema(ma.ModelSchema):
     class Meta:
-        model = SubCategory
+        model = Subcategory
 
 
 class CategorySchema(ma.ModelSchema):
-    subcategory = ma.Nested(SubCategorySchema(), many=True)
+    subcategory = ma.Nested(SubcategorySchema(), many=True)
 
     class Meta:
         model = Category
