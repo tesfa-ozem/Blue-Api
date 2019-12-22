@@ -1,10 +1,13 @@
-from flask import request, jsonify, send_from_directory
+from flask import request, jsonify, send_from_directory, json
 from werkzeug.utils import secure_filename
 from blue.utilities.utilities import *
 from blue import create_app
 import os
+from flask_httpauth import HTTPBasicAuth
 
 mod = Blueprint('api', __name__, url_prefix='/api')
+
+auth = HTTPBasicAuth()
 
 
 @mod.route('/categories', methods=['GET'])
@@ -12,9 +15,13 @@ def get_categories():
     try:
         categories = Category.query.order_by(Category.id).outerjoin(Subcategory).all()
         category_schema = CategorySchema(many=True)
-        return jsonify(category_schema.dump(categories))
+        resp = jsonify({'message': 'Record successfully retried',
+                        "data": category_schema.dump(categories)})
+        resp.status_code = 200
+        return resp
     except Exception as e:
-        return str(e)
+        resp = jsonify({'Error': str(e.args)})
+        return resp
 
 
 @mod.route('/category', methods=['POST'])
@@ -136,7 +143,7 @@ def get_subcategory():
         subcategory_schema = SubcategorySchema(many=True)
         resp = jsonify({'message': 'Record successfully retried',
                         "data": jsonify(subcategory_schema.dump(subcategory))})
-        resp.status_code = 201
+        resp.status_code = 200
         return resp
     except Exception as e:
         resp = jsonify({'Error': str(e.args)})
