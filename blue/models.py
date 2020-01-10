@@ -53,7 +53,7 @@ class Location(db.Model):
 
 class Photos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    photo = db.Column(db.String())
+    photo = db.Column(db.String(100))
     service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
     account_id = db.Column(db.Integer, db.ForeignKey("account.id"))
 
@@ -61,8 +61,8 @@ class Photos(db.Model):
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     provider = db.Column(db.Boolean)
-    bio = db.Column(db.String())
-    rating = db.Column(db.String())
+    bio = db.Column(db.String(250))
+    rating = db.Column(db.String(1))
     photos = db.relationship("Photos")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User")
