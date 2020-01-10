@@ -41,3 +41,5 @@ microblog.log*
 .vscode
 migrations
 uploads
+
+.env

@@ -1,5 +1,6 @@
 from blue import db
 from blue import ma
+from marshmallow import Schema, fields, pprint
 
 tags = db.Table('tags',
                 db.Column('account_id', db.Integer, db.ForeignKey('account.id'), primary_key=True),
@@ -74,7 +75,7 @@ class SubcategorySchema(ma.ModelSchema):
 
 
 class CategorySchema(ma.ModelSchema):
-    subcategory = ma.Nested(SubcategorySchema(), many=True)
+    subcategories = ma.Nested(SubcategorySchema, many=True)
 
     class Meta:
         model = Category

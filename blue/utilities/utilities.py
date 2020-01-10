@@ -4,7 +4,9 @@ import os
 from flask import Blueprint, json
 from sqlalchemy import inspect
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from werkzeug.utils import secure_filename
 
+from blue import create_app
 from blue.models import *
 import subprocess
 
@@ -39,6 +41,15 @@ class Utilities:
         if not os.path.exists(newpath):
             os.makedirs(newpath)
         return newpath
+
+    def save_image(img):
+
+        img_name = secure_filename(img.filename)
+        Utilities.create_new_folder(create_app().config['UPLOAD_FOLDER'])
+        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
+        create_app().logger.info("saving {}".format(saved_path))
+        img.save(saved_path)
+        return saved_path
 
 
 class AlchemyEncoder(json.JSONEncoder):
