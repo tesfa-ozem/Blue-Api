@@ -49,7 +49,7 @@ class Utilities:
         saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
         create_app().logger.info("saving {}".format(saved_path))
         img.save(saved_path)
-        return saved_path
+        return 'http://52.226.66.148:8080/uploads/'+img_name
 
 
 class AlchemyEncoder(json.JSONEncoder):

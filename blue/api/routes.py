@@ -77,7 +77,10 @@ def get_subcategories():
     try:
         subcategories = Subcategory.query.order_by(Subcategory.id).all()
         subcatagory_schema = SubcategorySchema(many=True)
-        return jsonify(subcatagory_schema.dump(subcategories))
+        resp = jsonify({'message': 'Record successfully retried',
+                        "data": subcatagory_schema.dump(subcategories)})
+        resp.status_code = 200
+        return resp
     except Exception as e:
         resp = jsonify({'Error': str(e.args)})
         return resp
@@ -194,3 +197,27 @@ def get_account():
     except Exception as e:
         resp = jsonify({'Error': str(e.args)})
     return resp
+
+
+@mod.route("/service", methods=['GET'])
+def get_services():
+    try:
+        if request.args.get('id') != '':
+            service_id = request.args.get('service_id')
+            service = Service.query.filter(Service.id == service_id).one()
+            service_schema = ServiceSchema()
+            resp = jsonify({'message': 'Record successfully retried',
+                            "data": service_schema.dump(service)})
+            resp.status_code = 200
+            return resp
+        else:
+            service = Service.query.order_by(Service.id).all()
+            service_schema = ServiceSchema(many=True)
+            resp = jsonify({'message': 'Record successfully retried',
+                            "data": service_schema.dump(service)})
+            resp.status_code = 200
+            return resp
+    except Exception as e:
+        resp = jsonify({'Error': str(e.args)})
+    return resp
+

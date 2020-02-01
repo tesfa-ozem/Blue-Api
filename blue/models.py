@@ -1,6 +1,5 @@
 from blue import db
 from blue import ma
-from marshmallow import Schema, fields, pprint
 
 tags = db.Table('tags',
                 db.Column('account_id', db.Integer, db.ForeignKey('account.id'), primary_key=True),
@@ -21,6 +20,7 @@ class Subcategory(db.Model):
     services_count = db.Column(db.String(20))
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     accounts = db.relationship("Account")
+    service = db.relationship("Service")
 
 
 class Service(db.Model):
@@ -69,7 +69,14 @@ class Account(db.Model):
     subcategory_id = db.Column(db.Integer, db.ForeignKey("subcategory.id"))
 
 
+class ServiceSchema(ma.ModelSchema):
+    class Meta:
+        model = Service
+
+
 class SubcategorySchema(ma.ModelSchema):
+    service = ma.Nested(ServiceSchema, many=True)
+
     class Meta:
         model = Subcategory
 
@@ -79,11 +86,6 @@ class CategorySchema(ma.ModelSchema):
 
     class Meta:
         model = Category
-
-
-class ServiceSchema(ma.ModelSchema):
-    class Meta:
-        model = Service
 
 
 class UserSchema(ma.ModelSchema):
