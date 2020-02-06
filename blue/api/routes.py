@@ -109,7 +109,6 @@ def add_user():
         name = request.form['name']
         email = request.form['email']
         phone = request.form['phone']
-
         user = User(name=name, phone=phone, email=email)
         db.session.add(user)
         db.session.commit()
@@ -128,10 +127,10 @@ def add_account():
         bio = request.form['bio']
         rating = request.form['rating']
         user_id = request.form['user_id']
-
         account = Account(provider=True, bio=bio, rating=rating, user_id=user_id)
         db.session.add(account)
         db.session.commit()
+        
         resp = jsonify({'message': 'Record successfully uploaded'})
         resp.status_code = 201
         return resp
@@ -202,22 +201,21 @@ def get_account():
 @mod.route("/service", methods=['GET'])
 def get_services():
     try:
-        if request.args.get('id') != '':
+        if request.args.get('service_id') is not None:
             service_id = request.args.get('service_id')
             service = Service.query.filter(Service.id == service_id).one()
             service_schema = ServiceSchema()
-            resp = jsonify({'message': 'Record successfully retried',
+            resp = jsonify({'message': 'Record successfully retrived',
                             "data": service_schema.dump(service)})
             resp.status_code = 200
             return resp
         else:
             service = Service.query.order_by(Service.id).all()
             service_schema = ServiceSchema(many=True)
-            resp = jsonify({'message': 'Record successfully retried',
+            resp = jsonify({'message': 'Record successfully retrived',
                             "data": service_schema.dump(service)})
             resp.status_code = 200
             return resp
     except Exception as e:
         resp = jsonify({'Error': str(e.args)})
     return resp
-
