@@ -1,4 +1,4 @@
-from flask import request, jsonify, send_from_directory, json
+from flask import request, jsonify, send_from_directory, json, abort, url_for, g
 from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 from blue.utilities.utilities import *
@@ -29,10 +29,10 @@ def get_categories():
 def add_categories():
     # check if the post request has the file part
     try:
-        if 'icon' not in request.files:
-            resp = jsonify({'message': 'No file part in the request'})
-            resp.status_code = 400
-            return resp
+        # if 'icon' not in request.files:
+        #     resp = jsonify({'message': 'No file part in the request'})
+        #     resp.status_code = 400
+        #     return resp
         file = request.files['icon']
         if file.filename == '':
             resp = jsonify({'message': 'No file selected for uploading'})
@@ -40,7 +40,7 @@ def add_categories():
             return resp
         if file and Utilities.allowed_file(file.filename):
             icon = request.files['icon']
-            icon_path = Utilities.save_image(icon)
+            icon_path = Utilities.save_image(icon, "Category")
             name = request.form['name']
             category = Category(name=name, icon=icon_path)
             db.session.add(category)
@@ -130,7 +130,7 @@ def add_account():
         account = Account(provider=True, bio=bio, rating=rating, user_id=user_id)
         db.session.add(account)
         db.session.commit()
-        
+
         resp = jsonify({'message': 'Record successfully uploaded'})
         resp.status_code = 201
         return resp
@@ -218,4 +218,85 @@ def get_services():
             return resp
     except Exception as e:
         resp = jsonify({'Error': str(e.args)})
+    return resp
+
+
+@mod.route('/sign_up', methods=['POST'])
+def new_user():
+    try:
+        print(request.data)
+        username = request.json['username']
+        password = request.json['password']
+        email = request.json['email']
+        if username is None or password is None or email is None:
+            abort(400)  # missing arguments
+        if User.query.filter_by(username=username).first() and User.query.filter_by(email=email) is not None:
+            abort(400)  # existing user
+        user = User(username=username, email=email)
+        user.hash_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'username': user.username}), 201, {
+            'User': 'Is created'}
+    except Exception as e:
+        return jsonify({'exception': str(e)}), 500, {}
+
+
+@mod.route('/token', methods=['POST'])
+@auth.login_required
+def get_auth_token():
+    token = g.user.generate_auth_token()
+    return jsonify({'token': token.decode('ascii')})
+
+
+@auth.verify_password
+def verify_password(username_or_token, password):
+    # first try to authenticate by token
+    user = User.verify_auth_token(username_or_token)
+    if not user:
+        # try to authenticate with username/password
+        user = User.query.filter_by(username=username_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+    g.user = user
+    return True
+
+
+@mod.route('/registerProvider', methods=['POST'])
+@auth.login_required
+def register_provider():
+    file = request.files['file']
+    date_of_birth = datetime.datetime.strptime(request.form['dob'], '%m-%d-%Y')
+    identification_path = ''
+    if file.filename == '':
+        resp = jsonify({'message': 'No file selected for uploading'})
+        resp.status_code = 400
+        return resp
+    if file and Utilities.allowed_file(file.filename):
+        identification = request.files['file']
+        identification_path = Utilities.save_image(identification, "identification")
+    user_logged = g.user.username
+    user = User.query.filter_by(username=user_logged).first()
+    user.date_of_birth = date_of_birth
+    user.name = request.form['name']
+    user.phone = request.form['phone']
+    user.service_id = request.form['service_id']
+    user.professional_detail = request.form['professional_detail']
+    user.experience = request.form['experience']
+    user.next_of_kin = request.form['next_of_kin']
+    user.service_documentation = request.form['service_documentation']
+    user.path_identification = identification_path
+    db.session.add(user)
+    db.session.commit()
+    resp = jsonify({'message': 'Record successfully retrived',
+                    "data": ""})
+    resp.status_code = 200
+    return resp
+
+
+@mod.route('/login', methods=['POST'])
+@auth.login_required
+def get_user():
+    resp = jsonify({'message': 'Logged In'})
+    resp.status_code = 200
     return resp

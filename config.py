@@ -13,5 +13,4 @@ class Config(object):
     ADMINS = ['your-email@example.com']
     PROJECT_HOME = os.path.dirname(os.path.realpath(__file__))
     UPLOAD_FOLDER = '{}/uploads/'.format(PROJECT_HOME)
-    FLASK_RUN_PORT = 8000
-    DEBUG = True
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')

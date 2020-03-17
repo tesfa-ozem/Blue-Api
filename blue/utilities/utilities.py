@@ -42,14 +42,14 @@ class Utilities:
             os.makedirs(newpath)
         return newpath
 
-    def save_image(img):
+    def save_image(img,sub_path):
 
         img_name = secure_filename(img.filename)
         Utilities.create_new_folder(create_app().config['UPLOAD_FOLDER'])
-        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
+        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], sub_path+img_name)
         create_app().logger.info("saving {}".format(saved_path))
         img.save(saved_path)
-        return 'http://52.226.66.148:8080/uploads/'+img_name
+        return saved_path
 
 
 class AlchemyEncoder(json.JSONEncoder):

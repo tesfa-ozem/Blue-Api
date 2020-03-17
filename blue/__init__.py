@@ -26,11 +26,13 @@ def create_app(config_class=Config):
     from blue.api.routes import mod as mod
     app.register_blueprint(mod)
 
+    from blue.site.routes import mod as mod
+    app.register_blueprint(mod)
+
     from blue.utilities.utilities import mod as mod
     app.register_blueprint(mod)
 
-
     return app
 
-from blue import models
 
+from blue import models
