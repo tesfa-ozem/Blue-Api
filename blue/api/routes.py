@@ -21,7 +21,9 @@ def get_categories():
         resp.status_code = 200
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -53,7 +55,10 @@ def add_categories():
             resp.status_code = 400
             return resp
     except Exception as e:
-        return str(e)
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
+        return resp
 
 
 @mod.route('/subcategory', methods=['POST'])
@@ -68,7 +73,9 @@ def add_subcategory():
         resp.status_code = 201
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -82,7 +89,9 @@ def get_subcategories():
         resp.status_code = 200
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -99,7 +108,9 @@ def add_service():
         resp.status_code = 201
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -116,7 +127,9 @@ def add_user():
         resp.status_code = 201
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -135,7 +148,9 @@ def add_account():
         resp.status_code = 201
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -150,7 +165,9 @@ def get_subcategory():
         resp.status_code = 200
         return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
         return resp
 
 
@@ -194,8 +211,10 @@ def get_account():
             resp.status_code = 200
             return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
-    return resp
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
+        return resp
 
 
 @mod.route("/service", methods=['GET'])
@@ -217,8 +236,10 @@ def get_services():
             resp.status_code = 200
             return resp
     except Exception as e:
-        resp = jsonify({'Error': str(e.args)})
-    return resp
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
+        return resp
 
 
 @mod.route('/sign_up', methods=['POST'])
@@ -239,7 +260,10 @@ def new_user():
         return jsonify({'username': user.username}), 201, {
             'User': 'Is created'}
     except Exception as e:
-        return jsonify({'exception': str(e)}), 500, {}
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
+        return resp
 
 
 @mod.route('/token', methods=['POST'])
