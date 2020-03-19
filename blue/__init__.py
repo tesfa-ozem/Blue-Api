@@ -32,6 +32,7 @@ def create_app(config_class=Config):
     from blue.utilities.utilities import mod as mod
     app.register_blueprint(mod)
 
+
     return app
 
 
