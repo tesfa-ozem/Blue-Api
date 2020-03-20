@@ -314,6 +314,7 @@ def register_provider():
         user.next_of_kin = request.json['next_of_kin']
         user.service_documentation = request.json['service_documentation']
         user.path_identification = identification_path
+        user.is_provider = request.json['is_provider']
         db.session.add(user)
         db.session.commit()
         resp = jsonify({'message': 'Record successfully retrived',
