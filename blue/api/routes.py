@@ -329,7 +329,24 @@ def register_provider():
 
 @mod.route('/login', methods=['POST'])
 @auth.login_required
-def get_user():
+def login():
     resp = jsonify({'message': 'Logged In'})
     resp.status_code = 200
     return resp
+
+
+@mod.route('/getProvider', methods=['POST'])
+@auth.login_required
+def get_provider():
+    try:
+        user_logged = g.user
+        user_schema = UserSchema(many=True)
+        resp = jsonify({'message': 'Record successfully retried',
+                        "data": user_schema.dump(user_logged)})
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
+        return resp
