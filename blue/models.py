@@ -55,6 +55,7 @@ class User(db.Model):
     experience = db.Column(db.String)
     next_of_kin = db.Column(db.String)
     path_business_license = db.Column(db.String)
+    is_provider = db.Column(db.Boolean)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -125,6 +126,8 @@ class CategorySchema(ma.ModelSchema):
 
 
 class UserSchema(ma.ModelSchema):
+    fields = ("name", "email", "is_provider")
+
     class Meta:
         model = User
 
