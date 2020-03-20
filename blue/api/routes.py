@@ -289,33 +289,42 @@ def verify_password(username_or_token, password):
 @mod.route('/registerProvider', methods=['POST'])
 @auth.login_required
 def register_provider():
-    file = request.files['file']
-    date_of_birth = datetime.datetime.strptime(request.form['dob'], '%m-%d-%Y')
-    identification_path = ''
-    if file.filename == '':
-        resp = jsonify({'message': 'No file selected for uploading'})
-        resp.status_code = 400
+    # TODO fix dates and file uploads
+    try:
+        data = request.data
+        print(str(data))
+        # file = request.files['file']
+        date_of_birth = datetime.datetime.strptime('08-04-1994', '%m-%d-%Y')
+        identification_path = ''
+        # if file.filename == '':
+        #     resp = jsonify({'message': 'No file selected for uploading'})
+        #     resp.status_code = 400
+        #     return resp
+        # if file and Utilities.allowed_file(file.filename):
+        #     identification = request.files['file']
+        #     identification_path = Utilities.save_image(identification, "identification")
+        user_logged = g.user.username
+        user = User.query.filter_by(username=user_logged).first()
+        user.date_of_birth = date_of_birth
+        user.name = request.json['name']
+        user.phone = request.json['phone']
+        user.service_id = request.json['service_id']
+        user.professional_detail = request.json['professional_detail']
+        user.experience = request.json['experience']
+        user.next_of_kin = request.json['next_of_kin']
+        user.service_documentation = request.json['service_documentation']
+        user.path_identification = identification_path
+        db.session.add(user)
+        db.session.commit()
+        resp = jsonify({'message': 'Record successfully retrived',
+                        "data": ""})
+        resp.status_code = 200
         return resp
-    if file and Utilities.allowed_file(file.filename):
-        identification = request.files['file']
-        identification_path = Utilities.save_image(identification, "identification")
-    user_logged = g.user.username
-    user = User.query.filter_by(username=user_logged).first()
-    user.date_of_birth = date_of_birth
-    user.name = request.form['name']
-    user.phone = request.form['phone']
-    user.service_id = request.form['service_id']
-    user.professional_detail = request.form['professional_detail']
-    user.experience = request.form['experience']
-    user.next_of_kin = request.form['next_of_kin']
-    user.service_documentation = request.form['service_documentation']
-    user.path_identification = identification_path
-    db.session.add(user)
-    db.session.commit()
-    resp = jsonify({'message': 'Record successfully retrived',
-                    "data": ""})
-    resp.status_code = 200
-    return resp
+    except Exception as e:
+        resp = jsonify({'error': str(e.args),
+                        'message': '',
+                        'error_code': 0})
+        return resp
 
 
 @mod.route('/login', methods=['POST'])
