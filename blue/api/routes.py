@@ -340,7 +340,7 @@ def login():
 def get_provider():
     try:
         user_logged = g.user
-        user_schema = UserSchema(many=True)
+        user_schema = UserSchema()
         resp = jsonify({'message': 'Record successfully retried',
                         "data": user_schema.dump(user_logged)})
         resp.status_code = 200
