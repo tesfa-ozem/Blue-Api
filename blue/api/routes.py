@@ -90,7 +90,7 @@ def get_subcategories():
         return resp
     except Exception as e:
         resp = jsonify({'error': str(e.args),
-                        'message': '',
+                        'message': str(e.args),
                         'error_code': 0})
         return resp
 
