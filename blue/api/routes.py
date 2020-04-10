@@ -123,7 +123,9 @@ def add_user():
         user = User(name=name, phone=phone, email=email)
         db.session.add(user)
         db.session.commit()
-        resp = jsonify({'message': 'Record successfully uploaded'})
+        resp = jsonify({'error': '',
+                        'message': 'Successful',
+                        'error_code': 201})
         resp.status_code = 201
         return resp
     except Exception as e:
