@@ -265,9 +265,9 @@ def new_user():
         return jsonify({'username': user.username}), 201, {
             'User': 'Is created'}
     except Exception as e:
-        resp = jsonify({'error': str(e),
+        resp = jsonify({'error': e,
                         'message': '',
-                        'error_code': 0})
+                        'error_code': 400}), 400
         return resp
 
 
