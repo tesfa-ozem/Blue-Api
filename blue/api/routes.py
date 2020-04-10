@@ -248,19 +248,24 @@ def new_user():
         print(request.data)
         username = request.json['username']
         password = request.json['password']
+        full_names = request.json['fullNames']
         email = request.json['email']
         if username is None or password is None or email is None:
-            abort(400)  # missing arguments
-        if User.query.filter_by(username=username).first() and User.query.filter_by(email=email) is not None:
-            abort(400)  # existing user
-        user = User(username=username, email=email)
+            return jsonify({'error': 'Missing arguments',
+                            'message': 'bad request',
+                            'error_code': 400}), 400
+        if User.query.filter_by(username=username).first() or User.query.filter_by(email=email) is not None:
+            return jsonify({'error': 'User exists',
+                            'message': 'bad request',
+                            'error_code': 400}), 400
+        user = User(username=username, email=email, name=full_names)
         user.hash_password(password)
         db.session.add(user)
         db.session.commit()
         return jsonify({'username': user.username}), 201, {
             'User': 'Is created'}
     except Exception as e:
-        resp = jsonify({'error': str(e.args),
+        resp = jsonify({'error': str(e),
                         'message': '',
                         'error_code': 0})
         return resp
@@ -351,3 +356,12 @@ def get_provider():
                         'message': '',
                         'error_code': 0})
         return resp
+
+
+@mod.route('getUser', methods=['POST'])
+@auth.login_required
+def get_user():
+    user = g.user
+    return jsonify({
+        'data': user
+    })
