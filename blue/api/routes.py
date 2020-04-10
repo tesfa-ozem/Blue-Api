@@ -264,8 +264,9 @@ def new_user():
         user.hash_password(password)
         db.session.add(user)
         db.session.commit()
-        return jsonify({'username': user.username}), 201, {
-            'User': 'Is created'}
+        return jsonify({'error': '',
+                        'message': 'User created',
+                        'error_code': 201}), 201
     except Exception as e:
         resp = jsonify({'error': e,
                         'message': '',
