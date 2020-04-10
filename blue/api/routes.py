@@ -256,7 +256,7 @@ def new_user():
             return jsonify({'error': 'Missing arguments',
                             'message': 'bad request',
                             'error_code': 400}), 400
-        if User.query.filter_by(username=username).first() or User.query.filter_by(email=email) is not None:
+        if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first() is not None:
             return jsonify({'error': 'User exists',
                             'message': 'bad request',
                             'error_code': 400}), 400
