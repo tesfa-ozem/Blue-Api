@@ -1,6 +1,8 @@
 from flask import request, jsonify, send_from_directory, json, abort, url_for, g
 from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
+
+from blue.logic.logic import Logic
 from blue.utilities.utilities import *
 from blue import create_app
 import os
@@ -247,7 +249,6 @@ def get_services():
 @mod.route('/sign_up', methods=['POST'])
 def new_user():
     try:
-        print(request.data)
         username = request.json['username']
         password = request.json['password']
         full_names = request.json['fullNames']
@@ -264,13 +265,16 @@ def new_user():
         user.hash_password(password)
         db.session.add(user)
         db.session.commit()
-        return jsonify({'error': '',
-                        'message': 'User created',
-                        'error_code': 201}), 201
+        response = jsonify({'error': '',
+                            'message': 'User created',
+                            'error_code': 201})
+        response.status_code = 201
+        return response
     except Exception as e:
-        resp = jsonify({'error': e,
+        resp = jsonify({'error': str(e),
                         'message': '',
-                        'error_code': 400}), 400
+                        'error_code': 404})
+        resp.status_code = 404
         return resp
 
 
@@ -368,3 +372,9 @@ def get_user():
     return jsonify({
         'data': user
     })
+
+
+@mod.route('/getAllUsers',methods=['GET'])
+def get_all_users():
+    logic = Logic()
+    return logic.get_all_users()

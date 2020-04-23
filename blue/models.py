@@ -1,3 +1,5 @@
+import datetime
+
 from blue import db
 from blue import ma
 from flask import current_app as app
@@ -55,7 +57,7 @@ class User(db.Model):
     experience = db.Column(db.String)
     next_of_kin = db.Column(db.String)
     path_business_license = db.Column(db.String)
-    is_provider = db.Column(db.Boolean)
+    is_provider = db.Column(db.Boolean, default=False)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -106,6 +108,14 @@ class Account(db.Model):
     subcategory_id = db.Column(db.Integer, db.ForeignKey("subcategory.id"))
 
 
+class MpesaPayment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    time_stamp = db.Column(db.DateTime, default=datetime.datetime.now)
+    amount = db.Column(db.String)
+    phone_number = db.Column(db.String)
+
+
 class ServiceSchema(ma.ModelSchema):
     class Meta:
         model = Service
@@ -145,3 +155,8 @@ class AccountSchema(ma.ModelSchema):
 class PhotoSchema(ma.ModelSchema):
     class Meta:
         model = Photos
+
+
+class MpesaSchema(ma.ModelSchema):
+    class Meta:
+        model = MpesaPayment
