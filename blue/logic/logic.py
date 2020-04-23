@@ -12,14 +12,20 @@ from blue.models import *
 class Logic:
 
     def get_customers(self):
-        user_count = User.query.filter(User.is_provider is not True).count()
-        return user_count
+        try:
+            user_count = User.query.filter(User.is_provider is not True).count()
+            return user_count
+        except:
+            pass
 
     def get_paymemts(self):
-        amount = db.session.query(
-            func.sum(MpesaPayment.amount)
-        ).scalar()
-        return str(amount)
+        try:
+            amount = db.session.query(
+                func.sum(MpesaPayment.amount)
+            ).scalar()
+            return str(amount)
+        except:
+            pass
 
     def get_revenue(self):
         pass
@@ -28,13 +34,16 @@ class Logic:
         pass
 
     def get_current_week_sales(self):
-        dates = pd.date_range('20130101', periods=6)
+        try:
+            dates = pd.date_range('20130101', periods=6)
 
-        payments = db.session.query(MpesaPayment.name, MpesaPayment.time_stamp, MpesaPayment.amount).all()
-        df = pd.DataFrame(payments)
-        df['day'] = pd.to_datetime(df['time_stamp'])
+            payments = db.session.query(MpesaPayment.name, MpesaPayment.time_stamp, MpesaPayment.amount).all()
+            df = pd.DataFrame(payments)
+            # df['day'] = pd.to_datetime(df['time_stamp'])
 
-        return df
+            return df
+        except:
+            pass
 
     def get_last_week_sales(self):
         pass
@@ -52,6 +61,9 @@ class Logic:
         pass
 
     def get_all_users(self):
-        users = db.session.query(User).all()
-        user_schema = UserSchema(many=True)
-        return jsonify(user_schema.dump(users))
+        try:
+            users = db.session.query(User).all()
+            user_schema = UserSchema(many=True)
+            return jsonify(user_schema.dump(users))
+        except:
+            pass
