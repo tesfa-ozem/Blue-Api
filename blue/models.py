@@ -18,6 +18,7 @@ class Category(db.Model):
     name = db.Column(db.String(64), unique=True)
     icon = db.Column(db.String(120))
     subcategories = db.relationship("Subcategory", backref='category', lazy="joined")
+    description = db.Column(db.String(100))
 
 
 class Subcategory(db.Model):

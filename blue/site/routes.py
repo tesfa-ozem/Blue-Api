@@ -28,6 +28,6 @@ def service():
     return render_template('service.html')
 
 
-@mod.route('/service')
+@mod.route('/provider_dash')
 def provider_dash():
     return render_template('providerdash.html')

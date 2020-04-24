@@ -1,4 +1,33 @@
 {% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .statustemp.e-inactivecolor {
+            background-color: #ffd7cc;
+            width: 64px;
+        }
+
+        .statustemp.e-activecolor {
+            background-color: #ccffcc;
+            width: 57px;
+        }
+
+        .statustxt.e-activecolor {
+            color: #00cc00;
+        }
+
+        .statustxt.e-inactivecolor {
+            color: #e60000;
+        }
+
+        .statustemp {
+            position: relative;
+            height: 19px;
+            border-radius: 5px;
+            text-align: center
+        }
+    </style>
+{% endblock %}
 
 {% block content %}
 
@@ -155,7 +184,7 @@ John Abraham</span>is now following you
         <!-- ============================================================== -->
         <!-- left sidebar -->
         <!-- ============================================================== -->
-       <div class="nav-left-sidebar sidebar-dark">
+        <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
@@ -299,6 +328,7 @@ John Abraham</span>is now following you
 
 {% block scripts %}
     {{ super() }}
+
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
@@ -308,11 +338,38 @@ John Abraham</span>is now following you
                     ej.grids.Grid.Inject(ej.grids.Edit, ej.grids.Toolbar);
                     var grid = new ej.grids.Grid({
                         dataSource: data,
-                         toolbar: ['Add', 'Edit', 'Delete'],
-                         editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' },
+
+                        allowGrouping: true,
+                        allowSorting: true,
+                        allowReordering: true,
                         columns: [
-                            {field: 'name', headerText: 'Full Names',  width: 120, type: 'string'},
-                            {field: 'id', width: 140, headerText: 'Id', type: 'number'},
+                            {field: 'id', width: 20, headerText: 'Id', type: 'number'},
+
+                            {
+                                field: 'name',
+                                headerText: 'Full Names',
+                                width: 50,
+                                type: 'string'
+                            }, {
+
+                                headerText: 'Status',
+                                width: 20,
+                                textAlign: 'Left',
+                                template:
+                                    `<div id="status" class="statustemp">
+                                     <span class="statustxt">Active</span>
+                                     </div>`,
+                            },
+                            {field: 'email', headerText: 'Email', width: 30, textAlign: 'Left', type: 'string'},
+                            {field: 'phone', headerText: 'Phone', width: 30, textAlign: 'Left', type: 'string'},
+                            {
+                                field: 'professional_detail',
+                                headerText: 'Details',
+                                textAlign: 'Left',
+                                width: 30,
+                                type: 'string'
+                            },
+
 
                         ],
                         allowPaging: true,

@@ -1,8 +1,0 @@
-{
-  "name": "BlueApi",
-  "version": "1.0.0",
-  "dependencies": {},
-  "devDependencies": {
-    "@syncfusion/ej2-data": "^18.1.43"
-  }
-}

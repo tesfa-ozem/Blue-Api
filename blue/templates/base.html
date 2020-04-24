@@ -4,9 +4,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+{% block head %}
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{{ url_for('static',filename='assets/vendor/fonts/circular-std/style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/libs/css/style.css') }}">
@@ -28,7 +27,11 @@
     <link href="https://cdn.syncfusion.com/ej2/ej2-inputs/styles/fabric.css" rel="stylesheet">
     <link href="https://cdn.syncfusion.com/ej2/ej2-calendars/styles/fabric.css" rel="stylesheet">
 
-    <title>Hello, world!</title>
+
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+    <!-- Bootstrap CSS -->
+
 </head>
 <body>
 
