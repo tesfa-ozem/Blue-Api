@@ -14,10 +14,20 @@ def index():
     logic = Logic()
     data = logic.get_current_week_sales()
 
-    return render_template('index.html', count=logic.get_customers(), amount=logic.get_paymemts() )
+    return render_template('index.html', count=logic.get_customers(), amount=logic.get_paymemts())
 
 
 @mod.route("/providers")
 def provider():
     payments = MpesaPayment()
     return render_template('providers.html')
+
+
+@mod.route('/service')
+def service():
+    return render_template('service.html')
+
+
+@mod.route('/service')
+def provider_dash():
+    return render_template('providerdash.html')

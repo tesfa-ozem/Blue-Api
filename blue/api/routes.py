@@ -13,13 +13,13 @@ mod = Blueprint('api', __name__, url_prefix='/api')
 auth = HTTPBasicAuth()
 
 
-@mod.route('/categories', methods=['GET'])
+@mod.route('/categories', methods=['POST'])
 def get_categories():
     try:
         categories = Category.query.order_by(Category.id).options(joinedload('subcategories')).all()
         category_schema = CategorySchema(many=True)
-        resp = jsonify({'message': 'Record successfully retried',
-                        "data": category_schema.dump(categories)})
+        resp = jsonify({'count': 1,
+                        'result': category_schema.dump(categories)})
         resp.status_code = 200
         return resp
     except Exception as e:
@@ -33,29 +33,14 @@ def get_categories():
 def add_categories():
     # check if the post request has the file part
     try:
-        # if 'icon' not in request.files:
-        #     resp = jsonify({'message': 'No file part in the request'})
-        #     resp.status_code = 400
-        #     return resp
-        file = request.files['icon']
-        if file.filename == '':
-            resp = jsonify({'message': 'No file selected for uploading'})
-            resp.status_code = 400
-            return resp
-        if file and Utilities.allowed_file(file.filename):
-            icon = request.files['icon']
-            icon_path = Utilities.save_image(icon, "Category")
-            name = request.form['name']
-            category = Category(name=name, icon=icon_path)
-            db.session.add(category)
-            db.session.commit()
-            resp = jsonify({'message': 'Record successfully uploaded'})
-            resp.status_code = 201
-            return resp
-        else:
-            resp = jsonify({'message': 'Allowed file types are txt, pdf, png, jpg, jpeg, gif'})
-            resp.status_code = 400
-            return resp
+        name = request.json['value']['name']
+        category = Category(name=name)
+        db.session.add(category)
+        db.session.commit()
+        resp = jsonify({'message': 'Record successfully uploaded'})
+        resp.status_code = 201
+        return resp
+
     except Exception as e:
         resp = jsonify({'error': str(e.args),
                         'message': '',
@@ -378,3 +363,4 @@ def get_user():
 def get_all_users():
     logic = Logic()
     return logic.get_all_users()
+
