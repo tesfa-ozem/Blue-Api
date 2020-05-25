@@ -84,8 +84,8 @@ class MpesaPayment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     time_stamp = db.Column(db.DateTime, default=datetime.datetime.now)
-    amount = db.Column(db.Stringdb.String(10))
-    phone_number = db.Column(db.Stringdb.String(10))
+    amount = db.Column(db.String(10))
+    phone_number = db.Column(db.String(10))
 
 
 class PhotosSchema(ma.ModelSchema):
