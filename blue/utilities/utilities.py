@@ -12,11 +12,20 @@ import subprocess
 
 mod = Blueprint('utilities', __name__)
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'svg'}
+ALLOWED_EXTENSIONS = {'png', 'jpeg', 'svg'}
 
 
 class Utilities:
-    def allowed_file(filename):
+    def __init__(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print(exc_type)
+
+    def allowed_file(self, filename):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     def create_new_dir(self):
@@ -32,21 +41,22 @@ class Utilities:
         else:
             print("Failure: Failed to Create a Directory (or) Directory already Exists", UPLOAD_FOLDER)
 
-    def object_as_dict(obj):
+    def object_as_dict(self, obj):
         return {c.key: getattr(obj, c.key)
                 for c in inspect(obj).mapper.column_attrs}
 
-    def create_new_folder(local_dir):
+    def create_new_folder(self, local_dir):
+
         newpath = local_dir
         if not os.path.exists(newpath):
             os.makedirs(newpath)
         return newpath
 
-    def save_image(img,sub_path):
-
+    def save_image(self, img, sub_path):
+        print(self.allowed_file(img))
         img_name = secure_filename(img.filename)
-        Utilities.create_new_folder(create_app().config['UPLOAD_FOLDER'])
-        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], sub_path+img_name)
+        self.create_new_folder(create_app().config['UPLOAD_FOLDER'])
+        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], sub_path + img_name)
         create_app().logger.info("saving {}".format(saved_path))
         img.save(saved_path)
         return saved_path
@@ -69,5 +79,3 @@ class AlchemyEncoder(json.JSONEncoder):
             return fields
 
         return json.JSONEncoder.default(self, obj)
-
-
