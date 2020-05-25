@@ -24,13 +24,13 @@ class Service(db.Model):
     user = db.relationship("User", back_populates="service")
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     date_of_birth = db.Column(db.DateTime)
-    path_identification = db.Column(db.String)
-    path_photo = db.Column(db.String)
-    professional_detail = db.Column(db.String)
-    service_documentation = db.Column(db.String)
-    experience = db.Column(db.String)
-    next_of_kin = db.Column(db.String)
-    path_business_license = db.Column(db.String)
+    path_identification = db.Column(db.String(200))
+    path_photo = db.Column(db.String(200))
+    professional_detail = db.Column(db.String(200))
+    service_documentation = db.Column(db.String(200))
+    experience = db.Column(db.String(200))
+    next_of_kin = db.Column(db.String(200))
+    path_business_license = db.Column(db.String(200))
 
 
 class User(db.Model):
