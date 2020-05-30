@@ -12,5 +12,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ADMINS = ['your-email@example.com']
     PROJECT_HOME = os.path.dirname(os.path.realpath(__file__))
-    UPLOAD_FOLDER = '{}/blue/static/uploads/'.format(PROJECT_HOME)
+    UPLOAD_FOLDER = '{}/blue/static/assets/images'.format(PROJECT_HOME)
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
