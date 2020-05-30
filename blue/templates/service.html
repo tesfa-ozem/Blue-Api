@@ -299,6 +299,11 @@ John Abraham</span>is now following you
 
 {% block scripts %}
     {{ super() }}
+    <script id="template" type="text/x-template">
+    <div class="image">
+        <img src="${photo[0]}" alt="${EmployeeID}" />
+    </div>
+</script>
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
 
     <script>
@@ -317,6 +322,7 @@ John Abraham</span>is now following you
             editSettings: {allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog'},
             columns: [
                 {field: 'name', headerText: 'Category Name', textAlign: 'Left', width: 90, type: 'string'},
+                { headerText: 'Icon', textAlign: 'Left', width: 90, template: '#template'},
 
             ],
             height: 315

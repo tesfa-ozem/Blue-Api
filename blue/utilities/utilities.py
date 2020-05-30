@@ -59,7 +59,7 @@ class Utilities:
         saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], sub_path + img_name)
         create_app().logger.info("saving {}".format(saved_path))
         img.save(saved_path)
-        return saved_path
+        return sub_path + img_name
 
 
 class AlchemyEncoder(json.JSONEncoder):
