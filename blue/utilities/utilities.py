@@ -53,7 +53,6 @@ class Utilities:
         return newpath
 
     def save_image(self, img, sub_path):
-        print(self.allowed_file(img))
         img_name = secure_filename(img.filename)
         saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
         create_app().logger.info("saving {}".format(saved_path))
