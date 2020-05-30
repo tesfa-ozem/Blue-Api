@@ -110,14 +110,14 @@ def update_photo():
     service_id = request.form['service_id']
     if request.method == "POST":
         if request.files:
-
+            time_stamp = str(datetime.datetime.now().strftime("%m-%d-%Y"))
             image = request.files["image"]
             with Utilities() as util:
-                path = util.save_image(image)
+                path = util.save_image(image, time_stamp)
                 if not path:
                     return "wrong format"
                 else:
-                    new_path = "http://35.208.229.105/static/assets/upload/{}".format(path)
+                    new_path = "http://35.208.229.105/static/upload/{}".format(path)
                     photo = Photos(photo=new_path, category_id=category_id)
                     db.session.add(photo)
                     db.session.commit()
