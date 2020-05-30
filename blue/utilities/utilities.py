@@ -58,6 +58,7 @@ class Utilities:
         saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
         create_app().logger.info("saving {}".format(saved_path))
         img.save(saved_path)
+        img.close()
         return img_name
 
 
