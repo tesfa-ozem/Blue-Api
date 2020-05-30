@@ -118,7 +118,7 @@ def update_photo():
                     return "wrong format"
                 else:
                     new_path = "http://35.208.229.105/static/assets/upload/{}".format(path)
-                    photo = Photos(photo=new_path, category_id=category_id, service_id=service_id)
+                    photo = Photos(photo=new_path, category_id=category_id)
                     db.session.add(photo)
                     db.session.commit()
                     return "Success"
