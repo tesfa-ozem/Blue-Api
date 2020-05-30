@@ -305,7 +305,7 @@ John Abraham</span>is now following you
         let data = new ej.data.DataManager({
             url: "{{ url_for('api.get_categories') }}",
             updateUrl: "#",
-            insertUrl: "{{ url_for('api.add_categories') }}",
+            insertUrl: "{{ url_for('api.add_category') }}",
             removeUrl: "Home/Delete",
             adaptor: new ej.data.UrlAdaptor
         });
