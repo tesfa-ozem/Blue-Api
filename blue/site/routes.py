@@ -4,7 +4,7 @@ from blue.logic.logic import Logic
 from blue.utilities.utilities import *
 from flask_httpauth import HTTPBasicAuth
 
-mod = Blueprint('site', __name__, template_folder='templates')
+mod = Blueprint('site', __name__, template_folder='templates',url_prefix='/site')
 
 auth = HTTPBasicAuth()
 
