@@ -55,10 +55,10 @@ class Utilities:
     def save_image(self, img, sub_path):
         print(self.allowed_file(img))
         img_name = secure_filename(img.filename)
-        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], sub_path + img_name)
+        saved_path = os.path.join(create_app().config['UPLOAD_FOLDER'], img_name)
         create_app().logger.info("saving {}".format(saved_path))
         img.save(saved_path)
-        return sub_path + img_name
+        return img_name
 
 
 class AlchemyEncoder(json.JSONEncoder):
