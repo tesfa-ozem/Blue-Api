@@ -90,7 +90,8 @@ class Logic:
         db.session.commit()
 
     def add_categories(self, args):
-        name = args['name']
+        name = args['value']['name']
+        print(name)
         categories = Category(name=name)
         db.session.add(categories)
         db.session.commit()

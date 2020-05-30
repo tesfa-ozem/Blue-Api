@@ -31,7 +31,7 @@ def verify_password(username_or_token, password):
     user = User.verify_auth_token(username_or_token)
     if not user:
         # try to authenticate with username/password
-        user = User.query.filter((User.username==username_or_token) |(User.email==username_or_token)).first()
+        user = User.query.filter((User.username == username_or_token) | (User.email == username_or_token)).first()
 
         if not user or not user.verify_password(password):
             return False
@@ -95,10 +95,13 @@ def add_category():
     return resp
 
 
-@mod.route('/categories', methods=['GET'])
+@mod.route('/categories', methods=['POST'])
 def get_categories():
     with Logic() as logic:
-        return jsonify(logic.get_categories(1))
+        resp = jsonify({'count': 1,
+                        'result': logic.get_categories(1)})
+        resp.status_code = 200
+        return resp
 
 
 @mod.route('/photos', methods=['POST'])
