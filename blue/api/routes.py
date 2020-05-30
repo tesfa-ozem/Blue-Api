@@ -110,7 +110,7 @@ def update_photo():
     service_id = request.form['service_id']
     if request.method == "POST":
         if request.files:
-            time_stamp = str(datetime.datetime.now().strftime("%m/%d/%Y"))
+            time_stamp = str(datetime.datetime.now().strftime("%m-%d-%Y"))
             image = request.files["image"]
             with Utilities() as util:
                 path = util.save_image(image, time_stamp)
