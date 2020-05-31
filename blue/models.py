@@ -111,5 +111,4 @@ class CategorySchema(ma.ModelSchema):
     photos = ma.Nested(PhotosSchema)
 
     class Meta:
-
         model = Category

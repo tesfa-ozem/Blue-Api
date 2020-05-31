@@ -82,7 +82,7 @@ class Logic:
         categories = Category.query.order_by(Category.id).paginate(page_id, 5, False)
         categories_schema = CategorySchema(many=True)
         data = categories_schema.dump(categories.items)
-        print(data)
+
         return [{x: y['photo'] if 'photos' == x else y for x, y in i.items()} for i in data]
 
     def update_categories(self, args):
