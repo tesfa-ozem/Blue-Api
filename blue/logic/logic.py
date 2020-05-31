@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify
 from sqlalchemy import func
 
@@ -79,7 +81,9 @@ class Logic:
     def get_categories(self, page_id):
         categories = Category.query.order_by(Category.id).paginate(page_id, 5, False)
         categories_schema = CategorySchema(many=True)
-        return categories_schema.dump(categories.items)
+        data = categories_schema.dump(categories.items)
+
+        return [{x: y['photo'] if 'photo' not in i else y for x, y in i.items()} for i in data]
 
     def update_categories(self, args):
         categories = Category.query.filter(Category.id == args.id)
@@ -112,4 +116,3 @@ class Logic:
     def add_image(self, args):
         image = Photos(photo=args['url'], service_id=args['id'])
         return image
-

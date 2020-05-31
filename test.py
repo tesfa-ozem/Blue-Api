@@ -22,7 +22,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_something(self):
         logic = Logic()
-        print(logic.get_current_week_sales())
+        print(logic.get_categories(1))
 
 
 if __name__ == '__main__':

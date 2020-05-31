@@ -98,6 +98,7 @@ def add_category():
 @mod.route('/categories', methods=['POST'])
 def get_categories():
     with Logic() as logic:
+        print(logic.get_categories(1))
         resp = jsonify({'count': 1,
                         'result': logic.get_categories(1)})
         resp.status_code = 200
