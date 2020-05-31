@@ -12,7 +12,7 @@ class Category(db.Model):
     name = db.Column(db.String(64))
     services_count = db.Column(db.String(20))
     service = db.relationship("Service")
-    photo = db.relationship("Photos")
+    photos = db.relationship("Photos", uselist=False, back_populates="category")
 
 
 class Service(db.Model):
@@ -77,6 +77,7 @@ class Photos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo = db.Column(db.String(100))
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+    category = db.relationship("Category", back_populates="photos")
     service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
 
 
@@ -90,6 +91,7 @@ class MpesaPayment(db.Model):
 
 class PhotosSchema(ma.ModelSchema):
     class Meta:
+        fields = ('photo',)
         model = Photos
 
 
@@ -106,7 +108,8 @@ class ServiceSchema(ma.ModelSchema):
 
 
 class CategorySchema(ma.ModelSchema):
-    photo = ma.Nested(PhotosSchema, many=True)
+    photos = ma.Nested(PhotosSchema)
 
     class Meta:
+
         model = Category
