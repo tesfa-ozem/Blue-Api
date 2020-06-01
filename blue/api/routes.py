@@ -141,7 +141,7 @@ def add_service():
     return "success"
 
 
-@mod.route('/services', methods=['Get'])
+@mod.route('/services', methods=['POST'])
 def get_services():
     with Logic() as logic:
         args = {
