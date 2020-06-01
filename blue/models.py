@@ -105,7 +105,7 @@ class ServiceSchema(ma.ModelSchema):
 
     class Meta:
         model = Service
-        fields = ('id', 'description', 'name','description',)
+        fields = ('id', 'description', 'name','service_documentation','photos')
 
 
 class CategorySchema(ma.ModelSchema):
