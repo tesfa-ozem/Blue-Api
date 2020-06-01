@@ -79,7 +79,7 @@ class Logic:
             pass
 
     def get_categories(self, page_id):
-        categories = Category.query.order_by(Category.id).paginate(page_id, 5, False)
+        categories = Category.query.order_by(Category.id).paginate(page_id, 10, False)
         categories_schema = CategorySchema(many=True)
         data = categories_schema.dump(categories.items)
         print(data)

@@ -153,6 +153,7 @@ def get_services():
         resp.status_code = 200
         return resp
 
+    return ""
 
 # @mod.route('/categories', methods=['POST'])
 # def get_categories():
