@@ -38,6 +38,9 @@ nosetests.xml
 venv
 app.db
 microblog.log*
+logs
 .vscode
 migrations
 uploads
+__pycache__
+.mypy_cache

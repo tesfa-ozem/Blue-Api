@@ -23,7 +23,7 @@ class Service(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", back_populates="service")
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
-    date_of_birth = db.Column(db.DateTime)
+    date_of_birth = db.Column(db.DateTime, default=datetime.datetime.now)
     path_identification = db.Column(db.String(200))
     path_photo = db.Column(db.String(200))
     professional_detail = db.Column(db.String(200))
@@ -91,7 +91,7 @@ class MpesaPayment(db.Model):
 
 class PhotosSchema(ma.ModelSchema):
     class Meta:
-        fields = ('photo',)
+        fields = ('id', 'photo')
         model = Photos
 
 
@@ -101,14 +101,16 @@ class UserSchema(ma.ModelSchema):
 
 
 class ServiceSchema(ma.ModelSchema):
-    user = ma.Nested(UserSchema, many=False)
+    photos = ma.Nested(PhotosSchema, many=True)
 
     class Meta:
         model = Service
+        fields = ('id', 'description', 'name','description',)
 
 
 class CategorySchema(ma.ModelSchema):
     photos = ma.Nested(PhotosSchema)
 
     class Meta:
+        fields = ('id', 'name', 'photos',)
         model = Category

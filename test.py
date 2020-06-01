@@ -24,6 +24,14 @@ class MyTestCase(unittest.TestCase):
         logic = Logic()
         print(logic.get_categories(1))
 
+    def test_get_data(self):
+        with Logic() as logic:
+            args = {
+                'category_id': 1,
+                'page_id': 1
+            }
+            logic.get_service(args)
+
 
 if __name__ == '__main__':
     unittest.main()

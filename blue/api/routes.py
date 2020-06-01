@@ -3,6 +3,7 @@ from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 
 from blue.logic.logic import Logic
+from blue.saf_methods.saf_methods import SafMethods
 from blue.utilities.utilities import *
 from blue import create_app
 import os
@@ -98,7 +99,6 @@ def add_category():
 @mod.route('/categories', methods=['POST'])
 def get_categories():
     with Logic() as logic:
-        print(logic.get_categories(1))
         resp = jsonify({'count': 1,
                         'result': logic.get_categories(1)})
         resp.status_code = 200
@@ -117,9 +117,15 @@ def update_photo():
                 path = util.save_image(image, time_stamp)
                 if not path:
                     return "wrong format"
-                else:
+                elif not service_id:
                     new_path = "http://35.208.229.105/static/assets/images/{}".format(path)
                     photo = Photos(photo=new_path, category_id=category_id)
+                    db.session.add(photo)
+                    db.session.commit()
+                    return "Success"
+                elif not category_id:
+                    new_path = "http://35.208.229.105/static/assets/images/{}".format(path)
+                    photo = Photos(photo=new_path, service_id=service_id)
                     db.session.add(photo)
                     db.session.commit()
                     return "Success"
@@ -130,17 +136,23 @@ def update_photo():
 @mod.route('/service', methods=['POST'])
 @token_auth.login_required
 def add_service():
-    user = g.user
-    category_id = request.json["category_id"]
-    service = Service(professional_detail="details", name="details", category_id=category_id, user_id=user.id)
-    db.session.add(service)
-    db.session.commit()
+    with Logic() as logic:
+        logic.create_service(request.json)
     return "success"
 
 
 @mod.route('/services', methods=['Get'])
 def get_services():
-    pass
+    with Logic() as logic:
+        args = {
+            'category_id': request.json['category_id'],
+            'page_id': request.json['page_id']
+        }
+        resp = jsonify({'count': 1,
+                        'result': logic.get_service(args)})
+        resp.status_code = 200
+        return resp
+
 
 # @mod.route('/categories', methods=['POST'])
 # def get_categories():
@@ -314,3 +326,18 @@ def get_services():
 #     resp = jsonify({'message': 'Logged In'})
 #     resp.status_code = 200
 #     return resp
+# Mpesa Payments
+
+@mod.route("/MakePayment", methods=['POST'])
+@token_auth.login_required
+def lipa_na_mpesa_online():
+
+    lines = request.json['lines']
+    trans_type = request.json['header']['transaction_type']
+    phone_number = request.json['phone']
+    args = request.json
+    with SafMethods() as payments:
+        response = payments.send_push(args=lines, phone_number=phone_number)
+        return json.dumps(response.json(), ensure_ascii=False)
+
+

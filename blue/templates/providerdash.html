@@ -39,7 +39,7 @@
             bottom: 10px;
             font-size: 12px;
             font-weight: 400;
-            padding: 10px 0px 0px 1px;
+            padding: 10px 0 0 1px;
         }
 
         .e-kanban .Open::before {
@@ -84,7 +84,7 @@
 
         .e-kanban .e-card-footer {
             display: flex;
-            padding: 0px 12px 12px;
+            padding: 0 12px 12px;
             line-height: 1;
             height: 35px;
         }
@@ -168,7 +168,7 @@
                     <ul class="navbar-nav ml-auto navbar-right-top">
                         <li class="nav-item">
                             <div id="custom-search" class="top-search-bar">
-                                <input class="form-control" type="text" placeholder="Search..">
+                                <input class="form-control" type="text" placeholder="Search.."/>
                             </div>
                         </li>
                         <li class="nav-item dropdown notification">
@@ -183,7 +183,7 @@
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img
-                                                            src="../assets/images/avatar-2.jpg" alt=""
+                                                            src="../static/assets/images/avatar-2.jpg" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span
                                                             class="notification-list-user-name">Jeremy Rakestraw</span>accepted
@@ -195,7 +195,7 @@
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img
-                                                            src="../assets/images/avatar-3.jpg" alt=""
+                                                            src="../static/assets/images/avatar-3.jpg" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span
                                                             class="notification-list-user-name">
@@ -207,7 +207,7 @@ John Abraham</span>is now following you
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img
-                                                            src="../assets/images/avatar-4.jpg" alt=""
+                                                            src="../static/assets/images/avatar-4.jpg" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span
                                                             class="notification-list-user-name">Monaan Pechi</span> is
@@ -219,7 +219,7 @@ John Abraham</span>is now following you
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img
-                                                            src="../assets/images/avatar-5.jpg" alt=""
+                                                            src="../static/assets/images/avatar-5.jpg" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span
                                                             class="notification-list-user-name">Jessica Caruso</span>accepted
@@ -243,29 +243,29 @@ John Abraham</span>is now following you
                                 <li class="connection-list">
                                     <div class="row">
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="../assets/images/github.png"
+                                            <a href="#" class="connection-item"><img src="../static/assets/images/github.png"
                                                                                      alt=""> <span>Github</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="../assets/images/dribbble.png"
+                                            <a href="#" class="connection-item"><img src="../static/assets/images/dribbble.png"
                                                                                      alt=""> <span>Dribbble</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="../assets/images/dropbox.png"
+                                            <a href="#" class="connection-item"><img src="../static/assets/images/dropbox.png"
                                                                                      alt=""> <span>Dropbox</span></a>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
                                             <a href="#" class="connection-item"><img
-                                                    src="../assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
+                                                    src="../static/assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
                                             <a href="#" class="connection-item"><img
-                                                    src="../assets/images/mail_chimp.png" alt=""><span>Mail chimp</span></a>
+                                                    src="../static/assets/images/mail_chimp.png" alt=""><span>Mail chimp</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="../assets/images/slack.png"
+                                            <a href="#" class="connection-item"><img src="../static/assets/images/slack.png"
                                                                                      alt=""> <span>Slack</span></a>
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@ John Abraham</span>is now following you
                         <li class="nav-item dropdown nav-user">
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                    src="../assets/images/avatar-1.jpg" alt=""
+                                    src="../static/assets/images/avatar-1.jpg" alt=""
                                     class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                                  aria-labelledby="navbarDropdownMenuLink2">
@@ -447,16 +447,13 @@ John Abraham</span>is now following you
 {% block scripts %}
     {{ super() }}
 
-    <script id="headerTemplate" type="text/x-jsrender">
+    <script id="headerTemplate" type="text/x-template">
     <div class="header-template-wrap">
         <div class="header-icon e-icons ${keyField}"></div>
         <div class="header-text">${headerText}</div>
     </div>
-
-
-
     </script>
-    <script id="cardTemplate" type="text/x-jsrender">
+    <script id="cardTemplate" type="text/x-template">
         <div class='card-template ${Priority}'>
             <div class='e-card-header'>
                 <div class='e-card-header-caption'>

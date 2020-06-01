@@ -1,6 +1,6 @@
 import json
 
-from flask import jsonify
+from flask import jsonify, g
 from sqlalchemy import func
 
 from blue import db
@@ -52,7 +52,7 @@ class Logic:
             # df['day'] = pd.to_datetime(df['time_stamp'])
 
             return df
-        except:
+        except Exception as e:
             pass
 
     def get_last_week_sales(self):
@@ -82,8 +82,8 @@ class Logic:
         categories = Category.query.order_by(Category.id).paginate(page_id, 5, False)
         categories_schema = CategorySchema(many=True)
         data = categories_schema.dump(categories.items)
-
-        return [{x: y['photo'] if 'photos' == x else y for x, y in i.items()} for i in data]
+        print(data)
+        return [{x: y['photo'] if 'photos' == x and i['photos'] is not None else y for x, y in i.items()} for i in data]
 
     def update_categories(self, args):
         categories = Category.query.filter(Category.id == args.id)
@@ -107,12 +107,19 @@ class Logic:
         db.session.commit()
 
     def create_service(self, args):
-        pass
+        user = g.user
+        service = Service(name=args['name'], description=args['description'], user_id=user.id,
+                          category_id=args['category_id'], )
+        db.session.add(service)
+        db.session.commit()
+
+    def get_service(self, args):
+        service = Service.query.filter(Service.category_id == args['category_id']).order_by(Service.id).paginate(
+            args['page_id'], 5, False)
+        service_schema = ServiceSchema(many=True)
+        data = service_schema.dump(service.items)
+        return data
 
     def list_service(self, page_id):
         service_list = Service.query.order_by(Service.id).paginate(page_id, 5, False)
         return service_list
-
-    def add_image(self, args):
-        image = Photos(photo=args['url'], service_id=args['id'])
-        return image
